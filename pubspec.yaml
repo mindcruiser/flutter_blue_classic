@@ -4,7 +4,7 @@ version: 0.0.3
 homepage: https://github.com/LenhartStephan/flutter_blue_classic
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
   flutter: '>=3.3.0'
 
 dependencies:
