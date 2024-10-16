@@ -144,7 +144,7 @@ class FlutterBlueClassicPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
             "stopScan" -> stopScan(result)
             "isScanningNow" -> isScanningNow(result)
             "bondDevice" -> bondDevice(result, call.argument<String>("address") ?: "")
-            "connect" -> connect(result, call.argument<String>("address") ?: "")
+            "connect" -> connect(result, call.argument<String>("address") ?: "", call.argument<String>("uuid") ?: "")
             "write" -> {
                 val id = call.argument<Int>("id")
                 val bytes = call.argument<ByteArray>("bytes")
@@ -364,7 +364,7 @@ class FlutterBlueClassicPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
 
     @SuppressLint("MissingPermission")
-    private fun connect(result: Result, address: String) {
+    private fun connect(result: Result, address: String, uuid: String) {
         var permissionSuccess = true
         val permissions = ArrayList<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -406,7 +406,7 @@ class FlutterBlueClassicPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
         val thread = Thread {
             try {
-                connection.connect(address)
+                connection.connect(address, uuid)
                 activityPluginBinding!!.activity.runOnUiThread {
                     result.success(id)
                 }

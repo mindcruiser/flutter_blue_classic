@@ -30,13 +30,20 @@ abstract class BluetoothConnection(
     @Throws(IOException::class)
     @TargetApi(31)
     @RequiresPermission( allOf = [Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN])
-    fun connect(address: String?, uuid: UUID?) {
+    fun connect(address: String?, uuid: String?) {
         if (isConnected()) {
             throw IOException("already connected")
         }
         val device = bluetoothAdapter.getRemoteDevice(address)
             ?: throw IOException("device not found")
-        val socket = device.createRfcommSocketToServiceRecord(uuid)
+
+        val targetUuid: UUID = if (uuid.isNullOrEmpty()) {
+          DEFAULT_UUID
+        } else {
+          UUID.fromString(uuid)
+        }
+
+        val socket = device.createRfcommSocketToServiceRecord(targetUuid)
             ?: throw IOException("socket connection not established")
 
         // Cancel discovery just to be sure
@@ -44,14 +51,6 @@ abstract class BluetoothConnection(
         socket.connect()
         connectionThread = ConnectionThread(socket)
         connectionThread!!.start()
-    }
-
-    /// Connects to given device by hardware address (default UUID used)
-    @TargetApi(31)
-    @RequiresPermission( allOf = [Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN])
-    @Throws(IOException::class)
-    fun connect(address: String?) {
-        connect(address, DEFAULT_UUID)
     }
 
     /// Disconnects current session (ignore if not connected)

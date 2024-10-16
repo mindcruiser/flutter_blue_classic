@@ -92,7 +92,7 @@ abstract class FlutterBlueClassicPlatform extends PlatformInterface {
   }
 
   /// Creates a connection to the device with the given address.
-  Future<BluetoothConnection?> connect(String address) {
+  Future<BluetoothConnection?> connect(String address, String? uuid) {
     throw UnimplementedError('connect() has not been implemented.');
   }
 

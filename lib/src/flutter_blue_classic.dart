@@ -53,8 +53,8 @@ class FlutterBlueClassic {
   Future<bool> bondDevice(String address) => _instance.bondDevice(address);
 
   /// Tries to create a connection to the device with the given address.
-  Future<BluetoothConnection?> connect(String address) =>
-      _instance.connect(address);
+  Future<BluetoothConnection?> connect(String address, [String uuid = '']) =>
+      _instance.connect(address, uuid);
 }
 
 /// State of the Bluetooth adapter
